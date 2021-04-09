@@ -1,0 +1,11 @@
+FROM alpine
+ARG TARGETPLATFORM
+
+COPY scripts /opt/resource
+RUN apk add --no-cache jq curl && \
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/$TARGETPLATFORM/kubectl && \
+    chmod +x ./kubectl && \
+    mv ./kubectl /opt && \
+    mkdir -p /opt/resource && \
+    chmod -R a+x /opt/resource && \
+    apk del curl

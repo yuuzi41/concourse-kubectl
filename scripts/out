@@ -1,0 +1,21 @@
+#!/bin/sh
+
+REQ=$(cat -)
+
+URI=$(echo $REQ | jq --raw-output .source.api_server_uri)
+NS=$(echo $REQ | jq --raw-output .source.namespace)
+CA=$(echo $REQ | jq --raw-output .source.certificate_authority_data)
+TOKEN=$(echo $REQ | jq --raw-output .source.token)
+CMDLINE=$(echo $REQ | jq --raw-output .params.cmdline)
+
+cd "/tmp/build/put/"
+
+/opt/kubectl config set-cluster cluster1 --server=$URI
+/opt/kubectl config set-context context1 --cluster=cluster1 --user=user1 --namespace=$NS
+/opt/kubectl config set clusters.cluster1.certificate-authority-data $CA
+/opt/kubectl config set-credentials user1 --token=$TOKEN
+/opt/kubectl config use-context context1
+
+/opt/kubectl $CMDLINE
+
+echo "{\"version\": {\"value\": \"na\"}, \"metadata\": [{\"cmdline\": \"${CMDLINE}\"}]}

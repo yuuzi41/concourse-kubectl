@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env sh
+
+set -e
+
+exec 3>&1
+exec 1>&2
 
 REQ=$(cat -)
 
@@ -18,4 +23,4 @@ cd "/tmp/build/put/"
 
 /opt/kubectl $CMDLINE
 
-echo "{\"version\": {\"value\": \"na\"}, \"metadata\": [{\"cmdline\": \"${CMDLINE}\"}]}
+echo '{"version": {"value\": "na"}, "metadata": [{"cmdline": "${CMDLINE}"}]}' >&3

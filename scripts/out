@@ -23,4 +23,6 @@ cd "/tmp/build/put/"
 
 /opt/kubectl $CMDLINE
 
-echo '{"version": {"value\": "na"}, "metadata": [{"cmdline": "${CMDLINE}"}]}' >&3
+RESULT='{"version": {"value": "na"}, "metadata": [{"cmdline": "value-cmdline"}]}'
+RESULT=$(echo $RESULT | sed s~value-cmdline~$CMDLINE~g)
+echo $RESULT >&3 
